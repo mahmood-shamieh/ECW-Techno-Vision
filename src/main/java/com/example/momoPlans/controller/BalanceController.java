@@ -23,11 +23,13 @@ public class BalanceController {
     @PostMapping("")
     public ResponseEntity callSoapService(@RequestBody Map test) {
         try {
-            return ResponseEntity.ok(balanceService.getBalanceResponse(
-                    Optional.ofNullable(String.valueOf(test.get("fri"))),
-                    Optional.ofNullable(Boolean.valueOf(test.get("includeReservation").toString())),
-                    Optional.ofNullable(String.valueOf(test.get("quoteId")))
-            ));
+            return ResponseEntity.ok(
+                    balanceService.getBalanceResponse(
+                            Optional.ofNullable(String.valueOf(test.get("fri"))),
+                            Optional.ofNullable(Boolean.valueOf(test.get("includeReservation").toString())),
+                            Optional.ofNullable(String.valueOf(test.get("quoteId")))
+                    )
+            );
         } catch (JsonProcessingException e) {
             return ResponseEntity.internalServerError().build();
         } catch (HttpClientErrorException e) {
@@ -39,12 +41,13 @@ public class BalanceController {
         } catch (RestClientException e) {
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.internalServerError().body(e);
         }
     }
+
     @PostMapping("/dummy/{id}")
     public ResponseEntity callDummyApi(@PathVariable int id) {
-            return ResponseEntity.ok(balanceService.getDummyApiResponse(id));
+        return ResponseEntity.ok(balanceService.getDummyApiResponse(id));
 
     }
 }
